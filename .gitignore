@@ -234,3 +234,10 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/SoftID/BusinessObject/Entity.cs
+/SoftID/BusinessObject
+/SoftID/ComponentModel
+/SoftID/Data/DbCommandConfiguration.cs
+/SoftID/Security
+/SoftID/Utilities/Age.cs
+/SoftID/Utilities/DateTimeExtension.cs

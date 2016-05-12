@@ -39,7 +39,7 @@ namespace SoftID.Data
         {
             using (DbCommand command = this.CreateCommand(commandText, commandType, parameters))
             {
-                try { return this.ExecuteList<T>(command, behavior, readerConverter); }
+                try { return this.ExecuteList<T>(command, behavior, false, readerConverter); }
                 catch (Exception ex) { throw ex; }
                 finally { command.Parameters.Clear(); }
             }
@@ -47,23 +47,22 @@ namespace SoftID.Data
 
         public virtual List<T> ExecuteList<T>(DbCommand command, Func<IDataRecord, T> readerConverter)
         {
-            return this.ExecuteList<T>(command, CommandBehavior.Default, readerConverter);
+            return this.ExecuteList<T>(command, CommandBehavior.Default, true, readerConverter);
         }
 
         public virtual List<T> ExecuteList<T>(DbCommand command, CommandBehavior behavior,
             Func<IDataRecord, T> readerConverter)
         {
-            if (command == null)
-                throw new ArgumentNullException("command");
-            command.Connection = this._Connection;
-            command.Transaction = this._Transaction;
-            command.CommandTimeout = this._Connection.ConnectionTimeout;
+            return this.ExecuteList<T>(command, behavior, true, readerConverter);
+        }
+
+        protected virtual List<T> ExecuteList<T>(DbCommand command, CommandBehavior behavior, bool cloneCommand,
+            Func<IDataRecord, T> readerConverter)
+        {
             try
             {
                 List<T> list = new List<T>();
-                if (_IsClosed)
-                    this._Connection.Open();
-                using (DbDataReader reader = command.ExecuteReader(behavior))
+                using (DbDataReader reader = ExecuteReader(command, behavior, cloneCommand))
                 {
                     while (reader.Read())
                     {
@@ -72,19 +71,15 @@ namespace SoftID.Data
                     }
                     reader.Close();
                 }
+                if (_IsClosed)
+                    this._Connection.Open();
                 return list;
             }
-            catch (Exception ex)
-            {
-                string msg = ex.Message.ToLower();
-                throw msg.Contains("duplicate key") ? new DuplicateKeyException(ex.Message, ex) : ex;
-            }
+            catch (Exception ex) { throw ex; }
             finally
             {
                 if (_IsClosed)
                     this._Connection.Close();
-                command.Transaction = null;
-                command.Connection = null;
             }
         }
     }

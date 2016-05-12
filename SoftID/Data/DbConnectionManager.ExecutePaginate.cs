@@ -21,21 +21,7 @@ namespace SoftID.Data
                     reader = this.ExecuteReader(command);
                     return reader;
                 }
-                catch (Exception ex)
-                {
-                    if (reader != null)
-                    {
-                        if (!reader.IsClosed)
-                            reader.Close();
-                        reader.Dispose();
-                    }
-                    string msg = ex.Message.ToLower();
-                    throw msg.Contains("duplicate key") ? new DuplicateKeyException(ex.Message, ex) : ex;
-                }
-                finally
-                {
-                    command.Parameters.Clear();
-                }
+                catch (Exception ex) { throw ex; }
             }
         }
 
@@ -91,6 +77,41 @@ namespace SoftID.Data
                 selectCommandText, orderBy, parameters))
             {
                 return new EnumerableReader<T>(this, command, CommandBehavior.Default, false, readerConverter);
+            }
+        }
+
+        public virtual List<T> ExecutePaginateList<T>(ref int pageIndex, int pageSize, out int totalRecords,
+            string orderBy, string selectCommandText,
+            Func<IDataRecord, T> readerConverter, params DbParameter[] parameters)
+        {
+            using (DbCommand command = this.CreatePaginateCommand(ref pageIndex, pageSize, out totalRecords,
+                selectCommandText, orderBy, parameters))
+            {
+                try
+                {
+                    List<T> list = new List<T>();
+                    using (DbDataReader reader = ExecutePaginateReader(ref pageIndex, pageSize, out totalRecords,
+                        orderBy, selectCommandText, parameters))
+                    {
+                        while (reader.Read())
+                        {
+                            T entity = readerConverter(reader);
+                            list.Add(entity);
+                        }
+                        reader.Close();
+                    }
+                    return list;
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message.ToLower();
+                    throw msg.Contains("duplicate key") ? new DuplicateKeyException(ex.Message, ex) : ex;
+                }
+                finally
+                {
+                    if (_IsClosed)
+                        _Connection.Close();
+                }
             }
         }
     }

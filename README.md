@@ -7,25 +7,25 @@ Lightweight Database App Library
    3. Transform data reader to type T by sending Func&lt;IDataRecord, T&gt; object to ExecuteEnumerableList or ExecutePaginateEnumerableList method.
    4. Database vendor independent by using ADO.NET Factory Framework (System.Data.Common namespace).
 2. Getting Started
-   1. Configuration
-      &lt;configuration&gt;
-        &lt;configSections&gt;
-          &lt;section name="softID"
-                   type="SoftID.Configuration.SoftIDConfigurationSection, SoftID" /&gt;
-        &lt;/configSections&gt;
-        &lt;softID defaultConnectionStringName="DefaultConnection"&gt;
-          &lt;paginateQueries&gt;
-            &lt;add providerName="System.Data.SqlClient"
-                 queryFormat="{0} ORDER BY {1} OFFSET @RowIndex1 ROWS FETCH NEXT @PageSize ROWS ONLY" /&gt;
-            &lt;add providerName="MySql.Data.MySqlClient"
-                 queryFormat="{0} ORDER BY {1} LIMIT @RowIndex1, @PageSize" /&gt;
-          &lt;/paginateQueries&gt;
-        &lt;/softID&gt;
-        &lt;connectionStrings&gt;
-          &lt;add name="DefaultConnection" providerName="System.Data.SqlClient"
-               connectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=dbname;User ID=sa;Password=sapassword" /&gt;
-        &lt;/connectionStrings&gt;
-      &lt;/configuration&gt;
+   1. Configuration<br/>
+      &lt;configuration&gt;<br/>
+      &nbsp;&nbsp;&lt;configSections&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;section name="softID"<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="SoftID.Configuration.SoftIDConfigurationSection, SoftID" /&gt;<br/>
+      &nbsp;&nbsp;&lt;/configSections&gt;<br/>
+      &nbsp;&nbsp;&lt;softID defaultConnectionStringName="DefaultConnection"&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;paginateQueries&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;add providerName="System.Data.SqlClient"<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queryFormat="{0} ORDER BY {1} OFFSET @RowIndex1 ROWS FETCH NEXT @PageSize ROWS ONLY" /&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;add providerName="MySql.Data.MySqlClient"<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queryFormat="{0} ORDER BY {1} LIMIT @RowIndex1, @PageSize" /&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;/paginateQueries&gt;<br/>
+      &nbsp;&nbsp;&lt;/softID&gt;<br/>
+      &nbsp;&nbsp;&lt;connectionStrings&gt;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;add name="DefaultConnection" providerName="System.Data.SqlClient"<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=dbname;User ID=sa;Password=sapassword" /&gt;<br/>
+      &nbsp;&nbsp;&lt;/connectionStrings&gt;<br/>
+      &lt;/configuration&gt;<br/>
    2. Using SoftID.Data.DbConnectionManager object
       using SoftID.Data;
       using SoftID.Utilities;

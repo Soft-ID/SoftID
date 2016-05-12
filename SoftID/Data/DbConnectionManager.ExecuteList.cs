@@ -71,8 +71,6 @@ namespace SoftID.Data
                     }
                     reader.Close();
                 }
-                if (_IsClosed)
-                    this._Connection.Open();
                 return list;
             }
             catch (Exception ex) { throw ex; }

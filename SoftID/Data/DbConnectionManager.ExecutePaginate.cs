@@ -102,11 +102,7 @@ namespace SoftID.Data
                     }
                     return list;
                 }
-                catch (Exception ex)
-                {
-                    string msg = ex.Message.ToLower();
-                    throw msg.Contains("duplicate key") ? new DuplicateKeyException(ex.Message, ex) : ex;
-                }
+                catch (Exception ex) { throw ex; }
                 finally
                 {
                     if (_IsClosed)

@@ -130,28 +130,14 @@ namespace SoftID.Data
         #region DbConnection
         public virtual void Open()
         {
-            try
-            {
-                _Connection.Open();
-                _IsClosed = false;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            _Connection.Open();
+            _IsClosed = false;
         }
 
         public virtual void Close()
         {
-            try
-            {
-                _Connection.Close();
-                _IsClosed = true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _Connection.Close();
+            _IsClosed = true;
         }
 
         public virtual void ChangeDatabase(string databaseName)

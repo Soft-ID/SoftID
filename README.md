@@ -4,8 +4,9 @@ Lightweight Database App Library
 1. Key Features
    1. Automatically open and close the connection when sql query execution.
    2. Can open and close the connection manually when using transaction or data reader.
-   3. Transform data reader to type T by sending Func&lt;IDataRecord, T&gt; object to ExecuteList, ExecuteEnumerableList or ExecutePaginateEnumerableList generic method.
+   3. Transform data reader to type T by sending Func&lt;IDataRecord, T&gt; object to ExecuteList, ExecuteEnumerableList, ExecutePaginateList or ExecutePaginateEnumerableList generic method.
    4. Database vendor independent by using ADO.NET Factory Framework (System.Data.Common namespace).
+   5. Support pagination to select sql query.
 2. Getting Started
    1. Configuration<br/>
       &lt;configuration&gt;<br/>

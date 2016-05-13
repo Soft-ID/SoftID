@@ -354,7 +354,14 @@ namespace SoftID.Data
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("Provider Name         : {0}\r\n", this.ProviderName);
+            sb.AppendFormat("Connection String Name: {0}\r\n", this.ConnectionStringName);
+            sb.AppendFormat("Active Transaction    : {0}\r\n", this.ActiveTransaction);
+            sb.AppendFormat("Is Closed             : {0}\r\n", this._IsClosed);
+            sb.AppendFormat("Connection State      : {0}\r\n", this.State);
+            sb.AppendFormat("Default Command Type  : {0}\r\n", this.DefaultCommandType);
+            sb.AppendFormat("Factory Type          : {0}\r\n", this._Factory.GetType().FullName);
             sb.AppendFormat("Connection String     : {0}\r\n", this.ConnectionString);
+            sb.AppendFormat("Paginate Format       : {0}\r\n", this._PaginateCommandTextFormat);
             return sb.ToString();
         }
 
@@ -371,7 +378,12 @@ namespace SoftID.Data
             DbConnectionManager typedObj = (DbConnectionManager)obj;
             return typedObj.ProviderName == this.ProviderName
                 && typedObj._ConnectionStringName == this._ConnectionStringName
-                && typedObj._Connection.ConnectionString == this._Connection.ConnectionString;
+                && typedObj._Connection.Equals(this._Connection)
+                && typedObj._ConnectionStringBuilder.Equals(this._ConnectionStringBuilder)
+                && typedObj._DefaultCommandType == this._DefaultCommandType
+                && typedObj._Factory.Equals(this._Factory)
+                && typedObj._IsClosed == this._IsClosed
+                && typedObj._PaginateCommandTextFormat.Equals(this._PaginateCommandTextFormat);
         }
         #endregion
     }

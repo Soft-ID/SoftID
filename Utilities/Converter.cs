@@ -31,7 +31,7 @@ namespace SoftID.Utilities
             try
             {
                 if (typeT.IsEnum)
-                    retValue = (T)Enum.Parse(typeT, (value ?? string.Empty).ToString(), true);
+                    retValue = (T)Enum.Parse(typeT, value.ToString(), true);
                 else if (value is IConvertible && typeT.GetInterface(typeof(IConvertible).FullName) != null)
                     retValue = provider == null ? (T)Convert.ChangeType(value, typeT)
                         : (T)Convert.ChangeType(value, typeT, provider);
@@ -71,17 +71,17 @@ namespace SoftID.Utilities
 
         public static T ToStruct<T>(this object value, T defaultValue, IFormatProvider provider) where T : struct
         {
-            return Converter.ToStruct<T>(value, defaultValue, provider, true);
+            return Converter.ToNullable<T>(value, provider, true).GetValueOrDefault(defaultValue);
         }
 
         public static T ToStruct<T>(this object value, T defaultValue, bool throwOnError) where T : struct
         {
-            return Converter.ToStruct<T>(value, defaultValue, null, throwOnError);
+            return Converter.ToNullable<T>(value, null, throwOnError).GetValueOrDefault(defaultValue);
         }
 
         public static T ToStruct<T>(this object value, T defaultValue) where T : struct
         {
-            return Converter.ToStruct<T>(value, defaultValue, null, true);
+            return Converter.ToNullable<T>(value, null, true).GetValueOrDefault(defaultValue);
         }
         #endregion
 
@@ -93,17 +93,17 @@ namespace SoftID.Utilities
 
         public static T ToStruct<T>(this object value, IFormatProvider provider) where T : struct
         {
-            return Converter.ToStruct<T>(value, provider, true);
+            return Converter.ToNullable<T>(value, provider, true).GetValueOrDefault();
         }
 
         public static T ToStruct<T>(this object value, bool throwOnError) where T : struct
         {
-            return Converter.ToStruct<T>(value, null, throwOnError);
+            return Converter.ToNullable<T>(value, null, throwOnError).GetValueOrDefault();
         }
 
         public static T ToStruct<T>(this object value) where T : struct
         {
-            return Converter.ToStruct<T>(value, null, true);
+            return Converter.ToNullable<T>(value, null, true).GetValueOrDefault();
         }
         #endregion
     }

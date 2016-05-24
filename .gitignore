@@ -241,3 +241,8 @@ _Pvt_Extensions
 /SoftID/Security
 /SoftID/Utilities/Age.cs
 /SoftID/Utilities/DateTimeExtension.cs
+/Utilities/Age.cs
+/Utilities/DateTimeExtension.cs
+/Data/DbCommandConfiguration.cs
+/content/web.config.install.xdt
+/content/app.config.install.xdt

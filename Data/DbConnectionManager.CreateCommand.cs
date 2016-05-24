@@ -11,13 +11,39 @@ namespace SoftID.Data
 {
     public partial class DbConnectionManager
     {
+        private DbCommand CreatePaginateCommand(ref int pageIndex, int pageSize,
+            string selectCommandText, string orderBy, params DbParameter[] parameters)
+        {
+            if (pageSize < 0)
+                pageSize = 1;
+            if (pageIndex < 0)
+                pageIndex = 0;
+            int rowIndex1 = pageIndex * pageSize;
+            int rowIndex2 = rowIndex1 + pageSize - 1;
+            if (rowIndex2 < rowIndex1)
+                rowIndex2 = rowIndex1;
+
+            selectCommandText = string.Format(_PaginateCommandTextFormat,
+                selectCommandText, orderBy);
+            DbCommand command = this.CreateCommand(selectCommandText, CommandType.Text, parameters);
+            command.CreateOrSetParameter("RowIndex1", DbType.Int32, rowIndex1);
+            command.CreateOrSetParameter("RowIndex2", DbType.Int32, rowIndex2);
+            command.CreateOrSetParameter("PageSize", DbType.Int32, pageSize);
+            return command;
+        }
+
         private DbCommand CreatePaginateCommand(ref int pageIndex, int pageSize, out int totalRecords,
             string selectCommandText, string orderBy, params DbParameter[] parameters)
         {
             DbCommand command = CreateCountCommand(selectCommandText, parameters);
             try { totalRecords = ExecuteScalar(command, false).ToStruct<int>(); }
             catch (Exception ex) { throw ex; }
-            finally { command.Parameters.Clear(); }
+            finally
+            {
+                command.Parameters.Clear();
+                command.Dispose();
+                command = null;
+            }
 
             if (pageSize < 0)
                 pageSize = 1;
